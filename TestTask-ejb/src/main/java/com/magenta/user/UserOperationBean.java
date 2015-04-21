@@ -8,33 +8,26 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.*;
 
-@Stateless(name="operation")
+@Stateless(name = "operation")
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 
 public class UserOperationBean implements UserOperation {
-    
+
     @PersistenceContext(unitName = "COLIBRI", type = PersistenceContextType.EXTENDED)
     private EntityManager em;
+
     
-    //private EntityManager em = Persistence.createEntityManagerFactory("COLIBRI").createEntityManager();
     private final String SQL_SELECT_COMMON = "select a from " + User.class.getSimpleName() + " a";
-    
+
     @Override
-    public User create( String username) {
-       // EntityTransaction et = em.getTransaction();
-        //et.begin();
-        
-     
+    public User create(String username) {
+      
         User user = new User();
         user.setUsername(username);
-           em.joinTransaction();
+        em.joinTransaction();
         em.persist(user);
-      
 
-        
-        //et.commit();
-       // em.refresh(user);
-        
+    
         return user;
     }
 
@@ -43,40 +36,39 @@ public class UserOperationBean implements UserOperation {
         em.joinTransaction();
         return em.merge(user);
     }
-    
+
     @Override
     public User findByPrimaryKey(Integer id) {
         em.joinTransaction();
         return em.find(User.class, id);
     }
-    
+
     @Override
-     public User findByName(String name) {
-          User user;
+    public User findByName(String name) {
+        User user;
         em.joinTransaction();
         Query user_query = em.createQuery("SELECT u FROM User u where u.username = :value1")
-                 .setParameter("value1", name);
-        if(user_query.getResultList().isEmpty()){
+                .setParameter("value1", name);
+        if (user_query.getResultList().isEmpty()) {
             return null;
+        } else {
+            user = (User) user_query.getResultList().get(0);
         }
-        else{
-                  user = (User) user_query.getResultList().get(0);
-        }
-   
+
         return user;
     }
+
     @Override
-    public User loginOrCreate(String name){
+    public User loginOrCreate(String name) {
         User user = findByName(name);
-        if(null!=user){
+        if (null != user) {
             return user;
-        }
-        else{
+        } else {
             return create(name);
         }
-       
+
     }
-     
+
     @Override
     public Collection<User> findAll() {
         em.joinTransaction();
@@ -89,7 +81,7 @@ public class UserOperationBean implements UserOperation {
         em.joinTransaction();
         em.remove(findByPrimaryKey(id));
     }
-    
+
     @PreDestroy
     public void releaseResources() {
         System.out.println("Close EntityManager for USER");
@@ -100,11 +92,9 @@ public class UserOperationBean implements UserOperation {
 
     @Override
     public Collection<Task> getTask(User user) {
-      em.joinTransaction();
-    
-    
-  //   em.refresh(user); 
-    // em.refresh(this);
-      return user.getTasks();
+        em.joinTransaction();
+
+        
+        return user.getTasks();
     }
 }

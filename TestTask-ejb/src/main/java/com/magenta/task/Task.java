@@ -8,97 +8,75 @@ import javax.persistence.*;
 import static javax.persistence.SharedCacheMode.NONE;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+
 @Entity
-@Table(name="TASKS")
+@Table(name = "TASKS")
 @Cacheable(false)
 public class Task implements Serializable {
-    
-    
-    
-    
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY) @Column(name = "id")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
-     
-   
-    
-    
-    @Column(name="name", nullable=false, length=50)
-   
+
+    @Column(name = "name", nullable = false, length = 50)
+
     private String taskName;
-    
-    
-    @Column(name="lastStartTime", nullable=false)
-   
+
+    @Column(name = "lastStartTime", nullable = false)
+
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date lastStartTime;
-    
-    
-    @Column(name="totalTime", nullable=false)
-    
+
+    @Column(name = "totalTime", nullable = false)
+
     private int totalTime;
     @ManyToOne
 
-    
-    @JoinColumn(name="userId", nullable=false)
- 
+    @JoinColumn(name = "userId", nullable = false)
+
     private User user;
-    
-   
-   
-    @Column(name="isActive", nullable=false, columnDefinition = "int default 0")
+
+    @Column(name = "isActive", nullable = false, columnDefinition = "int default 0")
     private Integer isActive;
-    
-    
-    
-    public Integer getIsActive(){
+
+    public Integer getIsActive() {
         return this.isActive;
     }
-    
-    
-    public User getUser(){
+
+    public User getUser() {
         return this.user;
     }
-    
-    
-    
-    
-    public int getTotalTime(){
+
+    public int getTotalTime() {
         return this.totalTime;
     }
-    public void setUser(User user){
+
+    public void setUser(User user) {
         this.user = user;
     }
-    
-    
-    public Date getLastStartTime(){
+
+    public Date getLastStartTime() {
         return this.lastStartTime;
     }
-    
-    public void setTaskName(String taskName){
-         this.taskName=taskName;
-     }
-   
-    public void setTotalTime(int totalTime){
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public void setTotalTime(int totalTime) {
         this.totalTime = totalTime;
     }
-    
-     
-     public void setLastStartTime(Date lastStartTime){
+
+    public void setLastStartTime(Date lastStartTime) {
         this.lastStartTime = lastStartTime;
     }
-    public void setIsActive(Integer isActive){
+
+    public void setIsActive(Integer isActive) {
         this.isActive = isActive;
     }
-    
-    
-    public Task() {}
-    
-    
-   
- 
-  
-    
-    
- 
+
+    public Task() {
+    }
 
 }
